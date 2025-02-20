@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
                 final payment = await fibPayment.createPayment(
                   PaymentRequest(
                     amount: '100.00',
-                    currency: 'USD',
+                    currency: 'IQD',
                     description: 'Test Payment',
                   ),
                   token,
