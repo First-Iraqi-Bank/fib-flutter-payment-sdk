@@ -26,8 +26,9 @@ void main() {
       // Get client ID & secret from .env
       final String clientId = dotenv.env['CLIENT_ID'] ?? '';
       final String clientSecret = dotenv.env['CLIENT_SECRET'] ?? '';
+      final String environment = 'dev';
 
-      fibPayment = FibPayment(clientId: clientId, clientSecret: clientSecret);
+      fibPayment = FibPayment(clientId: clientId, clientSecret: clientSecret, environment: environment);
 
       token = await fibPayment.authenticate();
     });
@@ -36,19 +37,17 @@ void main() {
       final payment = await fibPayment.createPayment(
         PaymentRequest(
           amount: '100.00',
-          currency: 'USD',
           description: 'Test Payment',
+          statusCallbackUrl : 'https://localhost:3000'
         ),
         token,
       );
-
       expect(payment.paymentId, isNotNull);
       paymentId = payment.paymentId;
     });
 
     test('Check Payment Status', () async {
       final status = await fibPayment.checkPaymentStatus(paymentId, token);
-
       expect(status.status, isNotNull);
       expect(status.status, anyOf(['PAID', 'UNPAID', 'DECLINED']));
     });
@@ -57,8 +56,8 @@ void main() {
       final payment = await fibPayment.createPayment(
         PaymentRequest(
           amount: '500.00',
-          currency: 'IQD',
           description: 'Test Cancel Payment',
+          statusCallbackUrl : 'https://fib.dev.fib.iq'
         ),
         token,
       );

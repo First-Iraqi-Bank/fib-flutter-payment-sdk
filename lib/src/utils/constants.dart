@@ -1,3 +1,3 @@
 class Constants {
-  static const String baseUrl = 'https://fib.dev.fib.iq';
+  static const String currency = 'IQD';
 }

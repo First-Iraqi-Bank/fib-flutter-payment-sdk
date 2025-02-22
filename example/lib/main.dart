@@ -7,7 +7,10 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  final FibPayment fibPayment = FibPayment(clientId: 'elec-top-up', clientSecret: '996ed63f-e36f-43ad-851b-42bcfecc792c');
+  final clientId = 'YOUR_CLIENT_ID';
+  final clientSecret = 'YOUR_CLIENT_SECRET';
+  final environment = 'YOUR_ENVIRONMENT'; // dev, stage or prod
+  final FibPayment fibPayment = FibPayment(clientId: 'YOUR_CLIENT_ID', clientSecret: 'YOUR_CLIENT_SECRET', environment: 'YOUR_ENVIRONMENT');
 
   @override
   Widget build(BuildContext context) {
@@ -19,15 +22,16 @@ class MyApp extends StatelessWidget {
             onPressed: () async {
               try {
                 final token = await fibPayment.authenticate();
-
                 final payment = await fibPayment.createPayment(
                   PaymentRequest(
                     amount: '100.00',
-                    currency: 'IQD',
                     description: 'Test Payment',
+                    statusCallbackUrl: 'https://your-callback-url.com'
                   ),
                   token,
                 );
+                print(token);
+
                 print('Payment Created: ${payment.paymentId}');
                 print('Payment QR Code: ${payment.qrCode}');
                 print('Payment readable code: ${payment.readableCode}');

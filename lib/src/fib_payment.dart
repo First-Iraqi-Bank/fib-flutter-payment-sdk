@@ -10,26 +10,27 @@ class FibPayment {
 
   final String clientId;
   final String clientSecret;
+  final String environment;
 
-  FibPayment({required this.clientId, required this.clientSecret});
+  FibPayment({required this.clientId, required this.clientSecret, required String this.environment});
 
   Future<String> authenticate() async {
-    return await _authService.authenticate(clientId, clientSecret);
+    return await _authService.authenticate(clientId, clientSecret, environment);
   }
 
   Future<PaymentResponse> createPayment(PaymentRequest request, String token) async {
-    return await _paymentService.createPayment(request, token);
+    return await _paymentService.createPayment(request, token, environment);
   }
 
   Future<PaymentStatus> checkPaymentStatus(String paymentId, String token) async {
-    return await _paymentService.checkPaymentStatus(paymentId, token);
+    return await _paymentService.checkPaymentStatus(paymentId, token, environment);
   }
 
   Future<void> cancelPayment(String paymentId, String token) async {
-    await _paymentService.cancelPayment(paymentId, token);
+    await _paymentService.cancelPayment(paymentId, token, environment);
   }
 
   Future<void> refundPayment(String paymentId, String token) async {
-    await _paymentService.refundPayment(paymentId, token);
+    await _paymentService.refundPayment(paymentId, token, environment);
   }
 }

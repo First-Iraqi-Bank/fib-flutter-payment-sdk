@@ -3,11 +3,11 @@ A Flutter package for handling FIB Online Payments securely and efficiently.
 
 ## Features
 
-- **Authentication:** Verifies your credentials to ensure that only authorized users can perform transactions. This step secures the payment process from the very beginning.
-- **Create Payment:** Initiates a new payment transaction by accepting details like amount, currency, and description. It handles the process securely and efficiently.
+- **Authentication:** Verifies client credentials to generate access tokens.
+- **Create Payment:** Initiates payments with flexible parameters and defaults.
 - **Cancel Payment:** Allows you to cancel a payment that is in progress or pending. This feature is useful if you need to stop a transaction before it completes.
-- **Check Payment Status:** Provides real-time updates on the state of a payment, letting you know whether it is UNPAID, PAID, or DECLIEND.
-- **Refund Payment:** Facilitates the reversal of a transaction by refunding the payment back to the payer. This is essential for handling cases of overcharge or cancellation after payment processing.
+- **Check Payment Status:** Retrieves real-time payment status updates.
+- **Refund Payment:** Processes refunds for completed transactions.
 
 ## Installation
 Add this package to your pubspec.yaml:
