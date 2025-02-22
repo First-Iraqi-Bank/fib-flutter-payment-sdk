@@ -1,29 +1,152 @@
+```markdown
 # FIB Online Payment
 A Flutter package for handling FIB Online Payments securely and efficiently.
 
 ## Features
-
 - **Authentication:** Verifies client credentials to generate access tokens.
 - **Create Payment:** Initiates payments with flexible parameters and defaults.
-- **Cancel Payment:** Allows you to cancel a payment that is in progress or pending. This feature is useful if you need to stop a transaction before it completes.
 - **Check Payment Status:** Retrieves real-time payment status updates.
+- **Cancel Payment:** Cancels pending/unpaid transactions.
 - **Refund Payment:** Processes refunds for completed transactions.
 
 ## Installation
-Add this package to your pubspec.yaml:
-
+Add to `pubspec.yaml`:
 ```yaml
 dependencies:
-  fib_online_payment: latest_version
+  fib_online_payment: ^1.0.0
 ```
-
 Then, run:
-
 ```sh
 flutter pub get
 ```
 
-## Usage
+### Service Initialization
+```dart
+final fibPayment = FibPayment(
+  clientId: 'elec-top-up',       // Your application/client ID
+  clientSecret: 'your-secret',   // Client Secret key for authentication
+  environment: 'dev',            // API environment: dev/stage/prod
+);
+```
+
+#### Parameter Descriptions:
+| Parameter      | Required | Description                                         |
+|----------------|----------|-----------------------------------------------------|
+| `clientId`     | Yes      | Unique client ID.              |
+| `clientSecret` | Yes      | Unique client Secret key.                |
+| `environment`  | Yes      | Determines API endpoint (dev, stage, or prod)       |
+
+---
+
+### Payment Request Parameters
+When creating payments using `PaymentRequest`:
+```dart
+PaymentRequest(
+  amount: '100.00',                // Required: Transaction amount
+  description: 'Test Payment',     // Optional: Human-readable description
+  statusCallbackUrl: 'your-url',   // Optional: A callback URL
+  expiresIn: 'PT1H',               // Optional: expiration duration
+  category: 'POS',           // Optional: Payment category
+  refundableFor: 'PT24H',          // Optional: Refund time
+);
+```
+
+#### Parameter Details:
+| Parameter           | Required | Default Value         | Description                                         |
+|---------------------|----------|-----------------------|-----------------------------------------------------|
+| `amount`            | Yes      | -                     | Transaction amount as string (e.g., '100.00')       |
+| `description`       | No       | 'FIB Payment'         | Payment description shown to users                  |
+| `statusCallbackUrl` | No       | Platform-default URL  | A callback URL             |
+| `expiresIn`         | No       | 'PT8H6M12.345S'       | Duration until payment expiration          |
+| `category`          | No       | 'POS'                 | Payment category (e.g., POS) |
+| `refundableFor`     | No       | 'PT48H' (48 hours)    | duration for refund eligibility            |
+
+---
+
+## Feature Examples
+
+### 1. Create Payment
+```dart
+final payment = await fibPayment.createPayment(
+  PaymentRequest(
+    amount: '50.00',
+    description: 'Coffee Order',
+    statusCallbackUrl: 'https://your-app.com/callback',
+    expiresIn: 'PT12H', // Expires in 12 hours
+    category: 'POS',
+  ),
+  token,
+);
+// Returns: 
+// PaymentResponse{
+//   paymentId: 'PAY-123', 
+//   qrCode: '...', 
+//   readableCode: '1234-5678',
+//   status: 'UNPAID'
+// }
+```
+
+### 2. Check Payment Status
+```dart
+final status = await fibPayment.checkPaymentStatus('PAY-123', token);
+// Returns: 
+// PaymentStatus{
+//   paymentId: 'PAY-123',
+//   status: 'PAID',
+// }
+```
+
+### 3. Cancel Payment
+```dart
+await fibPayment.cancelPayment('PAY-123', token);
+// Successful cancellation returns HTTP 204 (No Content)
+```
+
+### 4. Refund Payment
+```dart
+await fibPayment.refundPayment('PAY-123', token);
+// Successful refund initiation returns HTTP 202 (Accepted)
+```
+
+---
+
+## Response Models
+
+### PaymentResponse
+```dart
+{
+  "paymentId": "PAY-123",         // Unique payment identifier
+  "qrCode": "base64-image-data",  // QR code for payment scanning
+  "readableCode": "1234-5678",     // Human-friendly payment code
+  "status": "UNPAID"               // Initial payment status
+}
+```
+
+### PaymentStatus
+```dart
+{
+  "paymentId": "PAY-123",         // Original payment ID
+  "status": "PAID",               // Current status
+  "updatedAt": "ISO-8601-time"    // Last status update timestamp
+}
+```
+
+---
+
+## Error Handling
+Wrap operations in try-catch blocks:
+```dart
+try {
+  // Payment operations
+} catch (e) {
+  print('Error: ${e.toString()}');
+  // Example error: "API Error: 401 - Invalid credentials"
+}
+```
+
+---
+
+## Full Example Usage
 ```dart
 import 'package:flutter/material.dart';
 import 'package:fib_online_payment/fib_online_payment.dart';
@@ -35,13 +158,11 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  final FibPayment fibPayment;
-
   // Pass your credentials through the constructor.
-  MyApp() : fibPayment = FibPayment(
-    clientId: 'your_client_id',
-    clientSecret: 'your_client_secret',
-  );
+  final clientId = 'YOUR_CLIENT_ID';
+  final clientSecret = 'YOUR_CLIENT_SECRET';
+  final environment = 'YOUR_ENVIRONMENT'; // dev, stage or prod
+  final FibPayment fibPayment = FibPayment(clientId: 'YOUR_CLIENT_ID', clientSecret: 'YOUR_CLIENT_SECRET', environment: 'YOUR_ENVIRONMENT');
 
   @override
   Widget build(BuildContext context) {
@@ -59,8 +180,8 @@ class MyApp extends StatelessWidget {
                 final payment = await fibPayment.createPayment(
                   PaymentRequest(
                     amount: '100.00',
-                    currency: 'USD',
                     description: 'Test Payment',
+                    statusCallbackUrl: 'https://your-callback-url.com'
                   ),
                   token,
                 );
@@ -94,32 +215,6 @@ class MyApp extends StatelessWidget {
 }
 ```
 
-## Refund Example
-```dart
-void refundPaymentExample() async {
-  try {
-    final FibPayment fibPayment = FibPayment(
-      clientId: 'your_client_id',
-      clientSecret: 'your_client_secret',
-    );
-
-    await fibPayment.authenticate();
-    final paymentId = 'your_payment_id'; // Replace with a valid payment ID
-
-    await fibPayment.refundPayment(paymentId);
-    print('Payment Refunded');
-  } catch (e) {
-    print('Refund Error: $e');
-  }
-}
-```
-
-## Running Tests
-Run the tests using:
-
-```sh
-flutter test
-```
-
 ## License
-This project is licensed under the MIT License.
+MIT License
+```
