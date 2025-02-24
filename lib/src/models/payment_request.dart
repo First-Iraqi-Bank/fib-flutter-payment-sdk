@@ -5,16 +5,16 @@ part 'payment_request.g.dart';
 @JsonSerializable()
 class PaymentRequest {
   final String amount;
-  final String? description;
-  final String? statusCallbackUrl;
+  final String description;
+  final String statusCallbackUrl;
   final String? expiresIn;
   final String? category;
   final String? refundableFor;
 
   PaymentRequest({
     required this.amount,
-    this.description,
-    this.statusCallbackUrl,
+    required this.description,
+    required this.statusCallbackUrl,
     this.expiresIn,
     this.category,
     this.refundableFor,

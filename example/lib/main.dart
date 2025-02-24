@@ -7,10 +7,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  final clientId = 'YOUR_CLIENT_ID';
-  final clientSecret = 'YOUR_CLIENT_SECRET';
-  final environment = 'YOUR_ENVIRONMENT'; // dev, stage or prod
-  final FibPayment fibPayment = FibPayment(clientId: 'YOUR_CLIENT_ID', clientSecret: 'YOUR_CLIENT_SECRET', environment: 'YOUR_ENVIRONMENT');
+  final FibPayment fibPayment = FibPayment(clientId: 'YOUR_CLIENT_ID', clientSecret: 'YOUR_CLIENT_SECRET', environment: 'YOUR_ENVIRONMENT'); // YOUR_ENVIRONMENT=dev, stage or prod
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +27,7 @@ class MyApp extends StatelessWidget {
                   ),
                   token,
                 );
-                print(token);
+                
 
                 print('Payment Created: ${payment.paymentId}');
                 print('Payment QR Code: ${payment.qrCode}');
@@ -39,7 +36,7 @@ class MyApp extends StatelessWidget {
                 // Check payment status.
                 final status = await fibPayment.checkPaymentStatus(payment.paymentId, token);
                 print('Payment Status: ${status.status}');
-
+                
                 // Cancel payment example.
                 await fibPayment.cancelPayment(payment.paymentId, token);
                 await Future.delayed(Duration(seconds: 5)); // Wait for cancellation to process.

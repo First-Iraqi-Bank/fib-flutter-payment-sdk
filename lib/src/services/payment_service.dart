@@ -6,24 +6,31 @@ import 'package:fib_online_payment/src/services/api_service.dart';
 
 class PaymentService {
 
+  final String environment;
   final ApiService _apiService = ApiService();
 
-  Future<PaymentResponse> createPayment(PaymentRequest request, String token, String environment) async {
+  String url() => 'https://fib.$environment.fib.iq/protected/v1/payments';
+
+  PaymentService({
+    required this.environment
+  });
+
+  Future<PaymentResponse> createPayment(PaymentRequest request, String token) async {
       
      final body = {
       "monetaryValue": {
         "amount": request.amount,
         "currency": Constants.currency,
       },
-      "statusCallbackUrl": request.statusCallbackUrl ?? "https://URL_TO_UPDATE_YOUR_PAYMENT_STATUS",
-      "description": request.description ?? "FIB Payment",
-      "expiresIn":  request.expiresIn ?? "PT8H6M12.345S",
+      "statusCallbackUrl": request.statusCallbackUrl,
+      "description": request.description,
+      "expiresIn": request.expiresIn ?? "PT8H6M12.345S",
       "category": request.category ?? "POS",
       "refundableFor": request.refundableFor ?? "PT48H",
     };
 
     final response = await _apiService.post(
-      'https://fib.$environment.fib.iq/protected/v1/payments',
+      this.url(),
       {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -33,9 +40,9 @@ class PaymentService {
     return PaymentResponse.fromJson(response);
   }
 
-  Future<PaymentStatus> checkPaymentStatus(String paymentId, String token, String environment) async {
+  Future<PaymentStatus> checkPaymentStatus(String paymentId, String token) async {
     final response = await _apiService.get(
-      'https://fib.$environment.fib.iq/protected/v1/payments/$paymentId/status',
+      '${this.url()}/${paymentId}/status',
       {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -45,9 +52,9 @@ class PaymentService {
     return PaymentStatus.fromJson(response);
   }
 
-  Future<void> cancelPayment(String paymentId, String token, String environment) async {
+  Future<void> cancelPayment(String paymentId, String token) async {
     await _apiService.post(
-      'https://fib.$environment.fib.iq/protected/v1/payments/$paymentId/cancel',
+      '${this.url()}/${paymentId}/cancel',
       {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -56,9 +63,9 @@ class PaymentService {
     );
   }
 
-  Future<void> refundPayment(String paymentId, String token, String environment) async {
+  Future<void> refundPayment(String paymentId, String token) async {
    await _apiService.post(
-      'https://fib.$environment.fib.iq/protected/v1/payments/$paymentId/refund',
+      '${this.url()}/${paymentId}/refund',
       {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
