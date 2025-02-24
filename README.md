@@ -43,8 +43,8 @@ When creating payments using `PaymentRequest`:
 ```dart
 PaymentRequest(
   amount: '100.00',                // Required: Transaction amount
-  description: 'Test Payment',     // Optional: Human-readable description
-  statusCallbackUrl: 'your-url',   // Optional: A callback URL
+  description: 'Test Payment',     // Required: Human-readable description
+  statusCallbackUrl: 'your-url',   // Required: A callback URL
   expiresIn: 'PT1H',               // Optional: expiration duration
   category: 'POS',           // Optional: Payment category
   refundableFor: 'PT24H',          // Optional: Refund time
@@ -55,8 +55,8 @@ PaymentRequest(
 | Parameter           | Required | Default Value         | Description                                         |
 |---------------------|----------|-----------------------|-----------------------------------------------------|
 | `amount`            | Yes      | -                     | Transaction amount as string (e.g., '100.00')       |
-| `description`       | No       | 'FIB Payment'         | Payment description shown to users                  |
-| `statusCallbackUrl` | No       | Platform-default URL  | A callback URL             |
+| `description`       | Yes      | 'FIB Payment'         | Payment description shown to users                  |
+| `statusCallbackUrl` | Yes      | Platform-default URL  | A callback URL             |
 | `expiresIn`         | No       | 'PT8H6M12.345S'       | Duration until payment expiration          |
 | `category`          | No       | 'POS'                 | Payment category (e.g., POS) |
 | `refundableFor`     | No       | 'PT48H' (48 hours)    | duration for refund eligibility            |
@@ -159,9 +159,6 @@ void main() {
 
 class MyApp extends StatelessWidget {
   // Pass your credentials through the constructor.
-  final clientId = 'YOUR_CLIENT_ID';
-  final clientSecret = 'YOUR_CLIENT_SECRET';
-  final environment = 'YOUR_ENVIRONMENT'; // dev, stage or prod
   final FibPayment fibPayment = FibPayment(clientId: 'YOUR_CLIENT_ID', clientSecret: 'YOUR_CLIENT_SECRET', environment: 'YOUR_ENVIRONMENT');
 
   @override
