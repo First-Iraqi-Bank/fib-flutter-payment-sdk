@@ -28,21 +28,20 @@ class MyApp extends StatelessWidget {
                   token,
                 );
                 
-                print(payment);
 
-                // print('Payment Created: ${payment.paymentId}');
-                // print('Payment QR Code: ${payment.qrCode}');
-                // print('Payment readable code: ${payment.readableCode}');
+                print('Payment Created: ${payment.paymentId}');
+                print('Payment QR Code: ${payment.qrCode}');
+                print('Payment readable code: ${payment.readableCode}');
 
                 // Check payment status.
-                // final status = await fibPayment.checkPaymentStatus(payment.paymentId, token);
-                // print('Payment Status: ${status.status}');
-                //
-                // // Cancel payment example.
-                // await fibPayment.cancelPayment(payment.paymentId, token);
-                // await Future.delayed(Duration(seconds: 5)); // Wait for cancellation to process.
-                // final postCancelStatus = await fibPayment.checkPaymentStatus(payment.paymentId, token);
-                // print('Post Cancel Status: ${postCancelStatus.status}');
+                final status = await fibPayment.checkPaymentStatus(payment.paymentId, token);
+                print('Payment Status: ${status.status}');
+                
+                // Cancel payment example.
+                await fibPayment.cancelPayment(payment.paymentId, token);
+                await Future.delayed(Duration(seconds: 5)); // Wait for cancellation to process.
+                final postCancelStatus = await fibPayment.checkPaymentStatus(payment.paymentId, token);
+                print('Post Cancel Status: ${postCancelStatus.status}');
               } catch (e) {
                 print('Error: $e');
               }

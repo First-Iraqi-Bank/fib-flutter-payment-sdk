@@ -42,7 +42,7 @@ class PaymentService {
 
   Future<PaymentStatus> checkPaymentStatus(String paymentId, String token) async {
     final response = await _apiService.get(
-      '${this.url()}/status',
+      '${this.url()}/${paymentId}/status',
       {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -54,7 +54,7 @@ class PaymentService {
 
   Future<void> cancelPayment(String paymentId, String token) async {
     await _apiService.post(
-      '${this.url()}/$paymentId/cancel',
+      '${this.url()}/${paymentId}/cancel',
       {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -65,7 +65,7 @@ class PaymentService {
 
   Future<void> refundPayment(String paymentId, String token) async {
    await _apiService.post(
-      '${this.url()}/$paymentId/refund',
+      '${this.url()}/${paymentId}/refund',
       {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
