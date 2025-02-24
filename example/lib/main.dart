@@ -7,7 +7,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  final FibPayment fibPayment = FibPayment(clientId: 'isic-ttt', clientSecret: '1959d051-8fe0-4535-a51a-605213520bb2', environment: 'dev');
+  final FibPayment fibPayment = FibPayment(clientId: 'YOUR_CLIENT_ID', clientSecret: 'YOUR_CLIENT_SECRET', environment: 'YOUR_ENVIRONMENT'); // YOUR_ENVIRONMENT=dev, stage or prod
 
   @override
   Widget build(BuildContext context) {
