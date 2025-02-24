@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-// import 'dart:convert';
 
 part 'payment_response.g.dart';
 

@@ -1,28 +1,21 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import '../utils/constants.dart';
+import 'package:fib_online_payment/src/services/api_service.dart';
 
 class AuthService {
-  Future<String> authenticate(String clientId, String clientSecret) async {
-    final response = await http.post(
-      Uri.parse(Constants.baseUrl + '/auth/realms/fib-online-shop/protocol/openid-connect/token'),
-      headers: {
+  final ApiService _apiService = ApiService();
+
+  Future<String> authenticate(String clientId, String clientSecret, String environment) async {
+    final body = {
+      'grant_type': 'client_credentials',
+      'client_id': clientId,
+      'client_secret': clientSecret,
+    };
+    final response = await _apiService.post(
+      'https://fib.$environment.fib.iq/auth/realms/fib-online-shop/protocol/openid-connect/token',
+      {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: {
-        'grant_type': 'client_credentials',
-        'client_id': clientId,
-        'client_secret': clientSecret,
-      },
+      body,
     );
-    
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      // The token is typically returned under the "access_token" key.
-      return data['access_token'];
-    } else {
-      throw Exception('Failed to authenticate: ${response.statusCode} ${response.body}');
-    }
+    return response['access_token'];
   }
 }

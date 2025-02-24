@@ -5,13 +5,19 @@ part 'payment_request.g.dart';
 @JsonSerializable()
 class PaymentRequest {
   final String amount;
-  final String currency;
   final String description;
+  final String statusCallbackUrl;
+  final String? expiresIn;
+  final String? category;
+  final String? refundableFor;
 
   PaymentRequest({
     required this.amount,
-    required this.currency,
     required this.description,
+    required this.statusCallbackUrl,
+    this.expiresIn,
+    this.category,
+    this.refundableFor,
   });
 
   factory PaymentRequest.fromJson(Map<String, dynamic> json) =>

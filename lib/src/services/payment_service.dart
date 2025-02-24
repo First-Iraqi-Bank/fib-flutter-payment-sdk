@@ -1,91 +1,76 @@
 import 'package:fib_online_payment/src/models/payment_request.dart';
 import 'package:fib_online_payment/src/models/payment_response.dart';
 import 'package:fib_online_payment/src/models/payment_status.dart';
-import 'package:fib_online_payment/src/services/api_service.dart';
 import 'package:fib_online_payment/src/utils/constants.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
+import 'package:fib_online_payment/src/services/api_service.dart';
 
 class PaymentService {
-  final ApiService _apiService = ApiService(baseUrl: Constants.baseUrl);
+
+  final String environment;
+  final ApiService _apiService = ApiService();
+
+  String url() => 'https://fib.$environment.fib.iq/protected/v1/payments';
+
+  PaymentService({
+    required this.environment
+  });
 
   Future<PaymentResponse> createPayment(PaymentRequest request, String token) async {
-
-     final Map<String, dynamic> staticRequestData = {
+      
+     final body = {
       "monetaryValue": {
         "amount": request.amount,
-        "currency": request.currency,
+        "currency": Constants.currency,
       },
-      "statusCallbackUrl": "https://URL_TO_UPDATE_YOUR_PAYMENT_STATUS",
-      "description": request.description
+      "statusCallbackUrl": request.statusCallbackUrl,
+      "description": request.description,
+      "expiresIn": request.expiresIn ?? "PT8H6M12.345S",
+      "category": request.category ?? "POS",
+      "refundableFor": request.refundableFor ?? "PT48H",
     };
 
-     final response = await http.post(
-      Uri.parse(Constants.baseUrl + '/protected/v1/payments'),
-      headers: {
+    final response = await _apiService.post(
+      this.url(),
+      {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
       },
-      body: jsonEncode(staticRequestData),
+      body,
     );
-   
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      if (response.body.isNotEmpty) {
-          return PaymentResponse.fromJson(jsonDecode(response.body));
-      } else {
-          throw Exception('Empty response body');
-        }
-      } else {
-        throw Exception('Failed to create payment: ${response.statusCode} ${response.body}');
-    }
+    return PaymentResponse.fromJson(response);
   }
 
   Future<PaymentStatus> checkPaymentStatus(String paymentId, String token) async {
-    final response = await http.get(
-      Uri.parse(Constants.baseUrl + '/protected/v1/payments/$paymentId/status'),
-      headers: {
+    final response = await _apiService.get(
+      '${this.url()}/${paymentId}/status',
+      {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
-      });
-      if (response.statusCode == 200 || response.statusCode == 201) {
-      if (response.body.isNotEmpty) {
-          return PaymentStatus.fromJson(jsonDecode(response.body));
-      } else {
-          throw Exception('Empty response body');
-        }
-      } else {
-        throw Exception('Failed to check payment: ${response.statusCode} ${response.body}');
-    }
+      },
+    );
+    
+    return PaymentStatus.fromJson(response);
   }
 
   Future<void> cancelPayment(String paymentId, String token) async {
-    final response = await http.post(
-      Uri.parse(Constants.baseUrl + '/protected/v1/payments/$paymentId/cancel'),
-      headers: {
+    await _apiService.post(
+      '${this.url()}/${paymentId}/cancel',
+      {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
-      });
-      if (response.statusCode == 204) {
-        return;
-      } else {
-        throw Exception('Failed to cancel payment: ${response.statusCode} ${response.body}');
-      }
+      },
+      {},
+    );
   }
 
   Future<void> refundPayment(String paymentId, String token) async {
-    final response = await http.post(
-      Uri.parse(Constants.baseUrl + '/protected/v1/payments/$paymentId/refund'),
-      headers: {
+   await _apiService.post(
+      '${this.url()}/${paymentId}/refund',
+      {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
-      });
-      
-      if (response.statusCode == 202) {
-        return;
-      } else {
-        throw Exception('Failed to refund payment: ${response.statusCode} ${response.body}');
-      }
-
+      },
+      {},
+    );
   }
 }

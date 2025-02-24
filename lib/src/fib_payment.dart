@@ -5,16 +5,20 @@ import 'package:fib_online_payment/src/services/auth_service.dart';
 import 'package:fib_online_payment/src/services/payment_service.dart';
 
 class FibPayment {
-  final AuthService _authService = AuthService();
-  final PaymentService _paymentService = PaymentService();
 
   final String clientId;
   final String clientSecret;
+  final String environment;
 
-  FibPayment({required this.clientId, required this.clientSecret});
+  final AuthService _authService = AuthService();
+  late PaymentService _paymentService;
+
+  FibPayment({required this.clientId, required this.clientSecret, required String this.environment}) {
+    this._paymentService = PaymentService(environment: environment);
+  }
 
   Future<String> authenticate() async {
-    return await _authService.authenticate(clientId, clientSecret);
+    return await _authService.authenticate(clientId, clientSecret, environment);
   }
 
   Future<PaymentResponse> createPayment(PaymentRequest request, String token) async {
