@@ -1,4 +1,3 @@
-```markdown
 # FIB Online Payment
 A Flutter package for handling FIB Online Payments securely and efficiently.
 

@@ -13,7 +13,7 @@ class PaymentResponse {
   final String validUntil;
 
   PaymentResponse({
-   required this.paymentId,
+    required this.paymentId,
     required this.qrCode,
     required this.readableCode,
     required this.personalAppLink,
@@ -22,27 +22,8 @@ class PaymentResponse {
     required this.validUntil,
   });
 
-  factory PaymentResponse.fromJson(Map<String, dynamic> json) {
-    return PaymentResponse(
-      paymentId: json['paymentId'] ?? '',
-      qrCode: json['qrCode'] ?? '',
-      readableCode: json['readableCode'] ?? '',
-      personalAppLink: json['personalAppLink'] ?? '',
-      businessAppLink: json['businessAppLink'] ?? '',
-      corporateAppLink: json['corporateAppLink'] ?? '',
-      validUntil: json['validUntil'] ?? '',
-    );
-  }
+  factory PaymentResponse.fromJson(Map<String, dynamic> json) =>
+      _$PaymentResponseFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    return {
-      'paymentId': paymentId,
-      'qrCode': qrCode,
-      'readableCode': readableCode,
-      'personalAppLink': personalAppLink,
-      'businessAppLink': businessAppLink,
-      'corporateAppLink': corporateAppLink,
-      'validUntil': validUntil,
-    };
-  }
+  Map<String, dynamic> toJson() => _$PaymentResponseToJson(this);
 }
