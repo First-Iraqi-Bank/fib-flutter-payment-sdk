@@ -18,3 +18,4 @@ dev_dependencies:
     sdk: flutter
   build_runner: ^2.1.4
   json_serializable: ^6.9.4
+  
