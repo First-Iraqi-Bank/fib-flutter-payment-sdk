@@ -4,7 +4,6 @@ import 'package:fib_online_payment/src/models/payment_request.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:io';
 
-
 void main() {
   group('Payment Tests', () {
     late FibPayment fibPayment;
@@ -28,7 +27,10 @@ void main() {
       final String clientSecret = dotenv.env['CLIENT_SECRET'] ?? '';
       final String environment = 'dev';
 
-      fibPayment = FibPayment(clientId: clientId, clientSecret: clientSecret, environment: environment);
+      fibPayment = FibPayment(
+          clientId: clientId,
+          clientSecret: clientSecret,
+          environment: environment);
 
       token = await fibPayment.authenticate();
     });
@@ -36,10 +38,9 @@ void main() {
     test('Create Payment', () async {
       final payment = await fibPayment.createPayment(
         PaymentRequest(
-          amount: '100.00',
-          description: 'Test Payment',
-          statusCallbackUrl : 'https://localhost:3000'
-        ),
+            amount: '100.00',
+            description: 'Test Payment',
+            statusCallbackUrl: 'https://localhost:3000'),
         token,
       );
       expect(payment.paymentId, isNotNull);
@@ -55,10 +56,9 @@ void main() {
     test('Cancel Payment', () async {
       final payment = await fibPayment.createPayment(
         PaymentRequest(
-          amount: '500.00',
-          description: 'Test Cancel Payment',
-          statusCallbackUrl : 'https://fib.dev.fib.iq'
-        ),
+            amount: '500.00',
+            description: 'Test Cancel Payment',
+            statusCallbackUrl: 'https://fib.dev.fib.iq'),
         token,
       );
 
@@ -68,14 +68,13 @@ void main() {
 
       await fibPayment.cancelPayment(cancelPaymentId, token);
       await Future.delayed(Duration(seconds: 5));
-      final postCancelStatus = await fibPayment.checkPaymentStatus(cancelPaymentId, token);
+      final postCancelStatus =
+          await fibPayment.checkPaymentStatus(cancelPaymentId, token);
       expect(postCancelStatus.status, 'DECLINED');
     });
-
 
     // test('Refund Payment', () async {
     //   final response = await fibPayment.refundPayment(paymentId, token);
     // });
-
   });
 }

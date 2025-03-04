@@ -5,19 +5,16 @@ import 'package:fib_online_payment/src/utils/constants.dart';
 import 'package:fib_online_payment/src/services/api_service.dart';
 
 class PaymentService {
-
   final String environment;
   final ApiService _apiService = ApiService();
 
   String url() => 'https://fib.$environment.fib.iq/protected/v1/payments';
 
-  PaymentService({
-    required this.environment
-  });
+  PaymentService({required this.environment});
 
-  Future<PaymentResponse> createPayment(PaymentRequest request, String token) async {
-      
-     final body = {
+  Future<PaymentResponse> createPayment(
+      PaymentRequest request, String token) async {
+    final body = {
       "monetaryValue": {
         "amount": request.amount,
         "currency": Constants.currency,
@@ -40,7 +37,8 @@ class PaymentService {
     return PaymentResponse.fromJson(response);
   }
 
-  Future<PaymentStatus> checkPaymentStatus(String paymentId, String token) async {
+  Future<PaymentStatus> checkPaymentStatus(
+      String paymentId, String token) async {
     final response = await _apiService.get(
       '${this.url()}/${paymentId}/status',
       {
@@ -48,7 +46,7 @@ class PaymentService {
         'Authorization': 'Bearer $token',
       },
     );
-    
+
     return PaymentStatus.fromJson(response);
   }
 
@@ -64,7 +62,7 @@ class PaymentService {
   }
 
   Future<void> refundPayment(String paymentId, String token) async {
-   await _apiService.post(
+    await _apiService.post(
       '${this.url()}/${paymentId}/refund',
       {
         'Content-Type': 'application/json',

@@ -3,7 +3,8 @@ import 'package:fib_online_payment/src/services/api_service.dart';
 class AuthService {
   final ApiService _apiService = ApiService();
 
-  Future<String> authenticate(String clientId, String clientSecret, String environment) async {
+  Future<String> authenticate(
+      String clientId, String clientSecret, String environment) async {
     final body = {
       'grant_type': 'client_credentials',
       'client_id': clientId,
