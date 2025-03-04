@@ -3,8 +3,8 @@ import 'package:http/http.dart' as http;
 import '../utils/error_handler.dart';
 
 class ApiService {
-
-  Future<dynamic> post(String endpoint, Map<String, String> headers, dynamic body) async {
+  Future<dynamic> post(
+      String endpoint, Map<String, String> headers, dynamic body) async {
     final String? contentType = headers['Content-Type'];
     dynamic encodedBody;
     if (contentType == 'application/x-www-form-urlencoded') {

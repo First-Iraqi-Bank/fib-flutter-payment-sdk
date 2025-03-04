@@ -12,7 +12,7 @@ A Flutter package for handling FIB Online Payments securely and efficiently.
 Add to `pubspec.yaml`:
 ```yaml
 dependencies:
-  fib_online_payment: ^1.0.0
+  fib_online_payment: ^1.0.1
 ```
 Then, run:
 ```sh
@@ -212,5 +212,4 @@ class MyApp extends StatelessWidget {
 ```
 
 ## License
-MIT License
-```
+This project is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for details.
