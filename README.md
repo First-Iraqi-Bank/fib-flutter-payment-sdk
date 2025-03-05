@@ -12,7 +12,7 @@ A Flutter package for handling FIB Online Payments securely and efficiently.
 Add to `pubspec.yaml`:
 ```yaml
 dependencies:
-  fib_online_payment: ^1.1.0
+  fib_online_payment: ^1.1.1
 ```
 Then, run:
 ```sh
@@ -46,7 +46,6 @@ PaymentRequest(
   statusCallbackUrl: 'your-url',     // Required: A callback URL
   redirectUri: 'your-redirect-uri',  // Optional: Used to redirect to a specified add or web URL after the payment is done.
   expiresIn: 'PT1H',                 // Optional: expiration duration
-  category: 'POS',                   // Optional: Payment category
   refundableFor: 'PT24H',            // Optional: Refund time
 );
 ```
@@ -59,7 +58,6 @@ PaymentRequest(
 | `statusCallbackUrl` | Yes      | Platform-default URL  | A callback URL             |
 | `redirectUri`       | No       | Null                  | A redirect URL used to redirect the user after the payment is done.             |
 | `expiresIn`         | No       | 'PT8H6M12.345S'       | Duration until payment expiration          |
-| `category`          | No       | 'POS'                 | Payment category (e.g., POS) |
 | `refundableFor`     | No       | 'PT48H' (48 hours)    | duration for refund eligibility            |
 
 ---
@@ -75,7 +73,6 @@ final payment = await fibPayment.createPayment(
     statusCallbackUrl: 'https://your-app.com/callback',
     redirectUri: 'https://your-app.com',
     expiresIn: 'PT12H', // Expires in 12 hours
-    category: 'POS',
   ),
   token,
 );
@@ -134,7 +131,6 @@ await fibPayment.refundPayment('PAY-123', token);
 {
   "paymentId": "PAY-123",         // Original payment ID
   "status": "PAID",               // Current status
-  "updatedAt": "ISO-8601-time"    // Last status update timestamp
 }
 ```
 
