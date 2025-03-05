@@ -26,7 +26,8 @@ class MyApp extends StatelessWidget {
                   PaymentRequest(
                       amount: '100.00',
                       description: 'Test Payment',
-                      statusCallbackUrl: 'https://your-callback-url.com'),
+                      statusCallbackUrl: 'https://your-callback-url.com',
+                      redirectUri: "https://your-redirect-uri.com"),
                   token,
                 );
 

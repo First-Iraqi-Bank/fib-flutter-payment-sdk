@@ -40,7 +40,8 @@ void main() {
         PaymentRequest(
             amount: '100.00',
             description: 'Test Payment',
-            statusCallbackUrl: 'https://localhost:3000'),
+            statusCallbackUrl: 'https://localhost:3000',
+            redirectUri: 'https://example.com'),
         token,
       );
       expect(payment.paymentId, isNotNull);
