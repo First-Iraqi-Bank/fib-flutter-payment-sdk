@@ -23,7 +23,6 @@ class PaymentService {
       "description": request.description,
       "redirectUri": request.redirectUri ?? "",
       "expiresIn": request.expiresIn ?? "PT8H6M12.345S",
-      "category": request.category ?? "POS",
       "refundableFor": request.refundableFor ?? "PT48H",
     };
 

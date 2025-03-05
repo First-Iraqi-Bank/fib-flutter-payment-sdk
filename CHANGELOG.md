@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1
+### Adding Redirect URI
+- Removed category.
+
 ## 1.1.0
 ### Adding Redirect URI
 - Adding redirectUri to redirect the user after the payment is done.

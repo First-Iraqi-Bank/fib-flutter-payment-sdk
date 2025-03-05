@@ -13,7 +13,6 @@ PaymentRequest _$PaymentRequestFromJson(Map<String, dynamic> json) =>
       statusCallbackUrl: json['statusCallbackUrl'] as String,
       redirectUri: json['redirectUri'] as String?,
       expiresIn: json['expiresIn'] as String?,
-      category: json['category'] as String?,
       refundableFor: json['refundableFor'] as String?,
     );
 
@@ -24,6 +23,5 @@ Map<String, dynamic> _$PaymentRequestToJson(PaymentRequest instance) =>
       'statusCallbackUrl': instance.statusCallbackUrl,
       'redirectUri': instance.redirectUri,
       'expiresIn': instance.expiresIn,
-      'category': instance.category,
       'refundableFor': instance.refundableFor,
     };

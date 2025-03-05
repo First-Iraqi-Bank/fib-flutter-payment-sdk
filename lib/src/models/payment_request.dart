@@ -9,7 +9,6 @@ class PaymentRequest {
   final String statusCallbackUrl;
   final String? redirectUri;
   final String? expiresIn;
-  final String? category;
   final String? refundableFor;
 
   PaymentRequest({
@@ -18,7 +17,6 @@ class PaymentRequest {
     required this.statusCallbackUrl,
     this.redirectUri,
     this.expiresIn,
-    this.category,
     this.refundableFor,
   });
 
