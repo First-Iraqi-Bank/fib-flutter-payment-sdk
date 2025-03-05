@@ -12,7 +12,7 @@ A Flutter package for handling FIB Online Payments securely and efficiently.
 Add to `pubspec.yaml`:
 ```yaml
 dependencies:
-  fib_online_payment: ^1.0.1
+  fib_online_payment: ^1.1.0
 ```
 Then, run:
 ```sh
