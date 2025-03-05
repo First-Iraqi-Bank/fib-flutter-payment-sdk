@@ -12,7 +12,7 @@ A Flutter package for handling FIB Online Payments securely and efficiently.
 Add to `pubspec.yaml`:
 ```yaml
 dependencies:
-  fib_online_payment: ^1.0.1
+  fib_online_payment: ^1.1.0
 ```
 Then, run:
 ```sh
@@ -41,12 +41,13 @@ final fibPayment = FibPayment(
 When creating payments using `PaymentRequest`:
 ```dart
 PaymentRequest(
-  amount: '100.00',                // Required: Transaction amount
-  description: 'Test Payment',     // Required: Human-readable description
-  statusCallbackUrl: 'your-url',   // Required: A callback URL
-  expiresIn: 'PT1H',               // Optional: expiration duration
-  category: 'POS',           // Optional: Payment category
-  refundableFor: 'PT24H',          // Optional: Refund time
+  amount: '100.00',                  // Required: Transaction amount
+  description: 'Test Payment',       // Required: Human-readable description
+  statusCallbackUrl: 'your-url',     // Required: A callback URL
+  redirectUri: 'your-redirect-uri',  // Optional: Used to redirect to a specified add or web URL after the payment is done.
+  expiresIn: 'PT1H',                 // Optional: expiration duration
+  category: 'POS',                   // Optional: Payment category
+  refundableFor: 'PT24H',            // Optional: Refund time
 );
 ```
 
@@ -56,6 +57,7 @@ PaymentRequest(
 | `amount`            | Yes      | -                     | Transaction amount as string (e.g., '100.00')       |
 | `description`       | Yes      | 'FIB Payment'         | Payment description shown to users                  |
 | `statusCallbackUrl` | Yes      | Platform-default URL  | A callback URL             |
+| `redirectUri`       | No       | Null                  | A redirect URL used to redirect the user after the payment is done.             |
 | `expiresIn`         | No       | 'PT8H6M12.345S'       | Duration until payment expiration          |
 | `category`          | No       | 'POS'                 | Payment category (e.g., POS) |
 | `refundableFor`     | No       | 'PT48H' (48 hours)    | duration for refund eligibility            |
@@ -71,6 +73,7 @@ final payment = await fibPayment.createPayment(
     amount: '50.00',
     description: 'Coffee Order',
     statusCallbackUrl: 'https://your-app.com/callback',
+    redirectUri: 'https://your-app.com',
     expiresIn: 'PT12H', // Expires in 12 hours
     category: 'POS',
   ),
@@ -81,10 +84,12 @@ final payment = await fibPayment.createPayment(
 //   paymentId: 'PAY-123', 
 //   qrCode: '...', 
 //   readableCode: '1234-5678',
-//   status: 'UNPAID'
+//   personalAppLink: 'https://personal.dev.first-iraqi-bank.co...', 
+//   businessAppLink: 'https://business.dev.first-iraqi-bank.co...', 
+//   corporateAppLink: 'https://corporate.dev.first-iraqi-bank.co...',
+//   validUntil: '2025-03-05T11:46:24.181Z',
 // }
 ```
-
 ### 2. Check Payment Status
 ```dart
 final status = await fibPayment.checkPaymentStatus('PAY-123', token);
@@ -114,10 +119,13 @@ await fibPayment.refundPayment('PAY-123', token);
 ### PaymentResponse
 ```dart
 {
-  "paymentId": "PAY-123",         // Unique payment identifier
-  "qrCode": "base64-image-data",  // QR code for payment scanning
-  "readableCode": "1234-5678",     // Human-friendly payment code
-  "status": "UNPAID"               // Initial payment status
+  "paymentId": "PAY-123",                                              // Unique payment identifier
+  "qrCode": "base64-image-data",                                       // QR code for payment scanning
+  "readableCode": "1234-5678",                                         // Human-friendly payment code
+  "personalAppLink": 'https://personal.dev.first-iraqi-bank.co...',    // Personal App link
+  "businessAppLink": 'https://business.dev.first-iraqi-bank.co...',    // Business App link
+  "corporateAppLink": 'https://corporate.dev.first-iraqi-bank.co...',  // Corporate App link
+  "validUntil": '2025-03-05T11:46:24.181Z',                            // Payment validity
 }
 ```
 
@@ -177,7 +185,8 @@ class MyApp extends StatelessWidget {
                   PaymentRequest(
                     amount: '100.00',
                     description: 'Test Payment',
-                    statusCallbackUrl: 'https://your-callback-url.com'
+                    statusCallbackUrl: 'https://your-callback-url.com',
+                    redirectUri: 'https://your-redirect-url.com'
                   ),
                   token,
                 );

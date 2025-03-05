@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.0
+### Adding Redirect URI
+- Adding redirectUri to redirect the user after the payment is done.
+
 ## 1.0.1
 ### Updated doc and License
 

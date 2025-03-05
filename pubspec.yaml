@@ -1,6 +1,6 @@
 name: fib_online_payment
 description: A Flutter package for handling FIB Online Payments, including authentication, payment creation, cancellation, status checks, and refunds.
-version: 1.0.1
+version: 1.1.0
 homepage: https://github.com/First-Iraqi-Bank/fib-flutter-payment-sdk
 repository: https://github.com/First-Iraqi-Bank/fib-flutter-payment-sdk.git
 
