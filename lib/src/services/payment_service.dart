@@ -8,7 +8,7 @@ class PaymentService {
   final String environment;
   final ApiService _apiService = ApiService();
 
-  String url() => 'https://fib.$environment.fib.iq/protected/v1/payments';
+  String url() => 'https://fib-$environment.fib.iq/protected/v1/payments';
 
   PaymentService({required this.environment});
 

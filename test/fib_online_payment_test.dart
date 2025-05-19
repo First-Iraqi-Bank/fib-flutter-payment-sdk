@@ -59,7 +59,7 @@ void main() {
         PaymentRequest(
             amount: '500.00',
             description: 'Test Cancel Payment',
-            statusCallbackUrl: 'https://fib.dev.fib.iq'),
+            statusCallbackUrl: 'https://fib-dev.fib.iq'),
         token,
       );
 

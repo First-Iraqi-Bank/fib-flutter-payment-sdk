@@ -11,7 +11,7 @@ class AuthService {
       'client_secret': clientSecret,
     };
     final response = await _apiService.post(
-      'https://fib.$environment.fib.iq/auth/realms/fib-online-shop/protocol/openid-connect/token',
+      'https://fib-$environment.fib.iq/auth/realms/fib-online-shop/protocol/openid-connect/token',
       {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
