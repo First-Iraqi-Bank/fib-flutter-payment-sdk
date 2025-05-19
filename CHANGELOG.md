@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.2
+### Updated FIB base URI
+
 ## 1.1.1
 ### Adding Redirect URI
 - Removed category.
